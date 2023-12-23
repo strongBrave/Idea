@@ -1,0 +1,96 @@
+# Sorting display
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 10;
+int q[N] = {263,331,751,108,937,363,742,694,65,438};
+int tmp[N];
+void print_arr()
+{
+    for(int i = 0; i < N; i ++) cout << q[i] << " ";
+    cout << endl;
+}
+
+void inssort(int q[], int n)
+{
+    for(int i = 1; i < n; i++)
+    {
+        for(int j =i; (j >0 && q[j] < q[j-1]); j--)
+            {swap(q[j],q[j-1]);}
+        print_arr();
+    }
+}
+
+void bubblesort(int q[], int n)
+{
+    for(int i = 0;i<n;i++)
+    {
+        for(int j =n-1; j>i;j--)
+        {
+            if(q[j] < q[j-1]) {swap(q[j],q[j-1]);}
+        }
+        print_arr();
+    }
+}
+
+void mergesort(int q[], int l, int r)
+{
+    if(l >= r) return ;
+    int mid = (l+r) / 2;
+    int i = l, j = mid+1;
+    int k = 0;
+    mergesort(q,l,mid); mergesort(q,mid+1,r);
+    while(i <= mid && j <=r)
+    {
+        if(q[i] < q[j]) tmp[k++] = q[i++];
+        else tmp[k++] = q[j++];
+    }
+    
+    while(i <= mid) tmp[k++] = q[i++];
+    while(j <= r)   tmp[k++] = q[j++];
+    
+    for(int i = l, j=0; i <= r; i++) q[i] = tmp[j++];
+    print_arr();
+    
+}
+
+void quicksort(int q[], int l, int r)
+{
+    bool is_swap = false;
+    if(l >= r) return ;
+    int pivot = l;
+    int x = q[pivot];
+    cout << "Pivot: " << x << endl;
+    cout << "初始化："; print_arr();
+    swap(q[pivot], q[r]);
+    cout << "轴值第一次交换后："; print_arr();
+    int i = l-1, j = r;
+    while(i < j)
+    {
+        do i++; while(q[i] < x && i < j);
+        do j--; while(x < q[j] && i < j);
+        if(i < j)
+        {
+        swap(q[i], q[j]);
+        cout << "大小交换后：";
+        print_arr();
+        is_swap=true;}
+    }
+    if(! is_swap) cout <<"该次递归快速排序没有进行交换" << endl;
+    swap(q[i], q[r]);
+    cout << "轴值第二次交换后："; print_arr();
+    quicksort(q,l,i-1);quicksort(q,i+1,r);
+}
+
+
+int main()
+{
+    //bubblesort(q,N);
+    //mergesort(q,0,N-1);
+    
+    quicksort(q,0,N-1);
+    print_arr();
+    return 0;
+}
